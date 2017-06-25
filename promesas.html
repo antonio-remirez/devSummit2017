@@ -52,8 +52,10 @@
       arrayUtils, dom, on, esriConfig
     ) {
         
-      esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov");
-     
+      //esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov");
+      esriConfig.request.corsEnabledServers.push("earthquake.usgs.gov");
+
+      
       var lyr, legend;
 
       /**************************************************
