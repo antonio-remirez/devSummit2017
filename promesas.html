@@ -52,11 +52,10 @@
       arrayUtils, dom, on, esriConfig
     ) {
         
-      //esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov");
       esriConfig.request.corsEnabledServers.push("earthquake.usgs.gov");
 
       
-      var lyr, legend;
+      var lyr;
 
       /**************************************************
        * Define the specification for each field to create
@@ -68,99 +67,13 @@
         name: "ObjectID",
         alias: "ObjectID",
         type: "oid"
-      }, {
-        name: "title",
-        alias: "title",
-        type: "string"
-      }, {
-        name: "type",
-        alias: "type",
-        type: "string"
-      }, {
-        name: "place",
-        alias: "place",
-        type: "string"
-      }, {
-        name: "depth",
-        alias: "depth",
-        type: "string"
-      }, {
-        name: "time",
-        alias: "time",
-        type: "date"
-      }, {
+		}, {
         name: "mag",
         alias: "Magnitude",
         type: "double"
-      }, {
-        name: "url",
-        alias: "url",
-        type: "string"
-      }, {
-        name: "mmi",
-        alias: "intensity",
-        type: "double"
-      }, {
-        name: "felt",
-        alias: "Number of felt reports",
-        type: "double"
-      }, {
-        name: "sig",
-        alias: "significance",
-        type: "double"
       }];
 
-      // Set up popup template for the layer
-      var pTemplate = {
-        title: "{title}",
-        content: [{
-          type: "fields",
-          fieldInfos: [{
-            fieldName: "place",
-            label: "Location",
-            visible: true
-          }, {
-            fieldName: "time",
-            label: "Date and time",
-            visible: true
-          }, {
-            fieldName: "mag",
-            label: "Magnitude",
-            visible: true
-          }, {
-            fieldName: "mmi",
-            label: "Intensity",
-            visible: true
-          }, {
-            fieldName: "depth",
-            label: "Depth",
-            visible: true
-          }, {
-            fieldName: "felt",
-            label: "Number who felt the quake",
-            visible: true,
-            format: {
-              digitSeparator: true,
-              places: 0
-            }
-          }, {
-            fieldName: "sig",
-            label: "Significance",
-            visible: true
-          }, {
-            fieldName: "url",
-            label: "More info",
-            visible: true
-          }]
-        }],
-        fieldInfos: [{
-          fieldName: "time",
-          format: {
-            dateFormat: "short-date-short-time"
-          }
-        }]
-      };
-
+	  
       /**************************************************
        * Create the map and view
        **************************************************/
@@ -174,14 +87,7 @@
         container: "viewDiv",
         map: map,
         center: [-144.492, 62.771],
-        zoom: 5,
-        // customize ui padding for legend placement
-        ui: {
-          padding: {
-            bottom: 15,
-            right: 0
-          }
-        }
+        zoom: 5
       });
 
       /**************************************************
@@ -266,7 +172,6 @@
         getData()
           .then(createGraphics) // then send it to the createGraphics() method
           .then(createLayer) // when graphics are created, create the layer
-          .then(createLegend) // when layer is created, create the legend
           .otherwise(errback);
       });
 
@@ -302,16 +207,7 @@
             // select only the attributes you care about
             attributes: {
               ObjectID: i,
-              title: feature.properties.title,
-              type: feature.properties.type,
-              place: feature.properties.place,
-              depth: feature.geometry.coordinates[2] + " km",
-              time: feature.properties.time,
-              mag: feature.properties.mag,
-              mmi: feature.properties.mmi,
-              felt: feature.properties.felt,
-              sig: feature.properties.sig,
-              url: feature.properties.url
+              mag: feature.properties.mag
             }
           };
         });
@@ -332,37 +228,14 @@
           spatialReference: {
             wkid: 4326
           },
-          geometryType: "point", // Must be set when creating a layer from Graphics
-          popupTemplate: pTemplate
+          geometryType: "point"
         });
 
         map.add(lyr);
         return lyr;
       }
 
-      /******************************************************************
-       * Add layer to layerInfos in the legend
-       ******************************************************************/
-
-      function createLegend(layer) {
-        // if the legend already exists, then update it with the new layer
-        if (legend) {
-          legend.layerInfos = [{
-            layer: layer,
-            title: "Magnitude"
-          }];
-        } else {
-          legend = new Legend({
-            view: view,
-            layerInfos: [
-            {
-              layer: layer,
-              title: "Earthquake"
-            }]
-          }, "infoDiv");
-        }
-      }
-
+      
       // Executes if data retrieval was unsuccessful.
       function errback(error) {
         console.error("Creating legend failed. ", error);
@@ -376,7 +249,6 @@
   <div id="viewDiv"></div>
   <div id="infoDiv">
     <h2>Worldwide Earthquakes</h2>
-    Reported from 03/28/16 to 04/04/16
   </div>
 </body>
 </html>
