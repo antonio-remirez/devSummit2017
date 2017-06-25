@@ -45,12 +45,17 @@
       "dojo/_base/array",
       "dojo/dom",
       "dojo/on",
+      "esri/config",
       "dojo/domReady!"
     ], function(MapView, Map, FeatureLayer, Field, Point,
       SimpleRenderer, SimpleMarkerSymbol, Legend, esriRequest,
-      arrayUtils, dom, on
+      arrayUtils, dom, on, esriConfig
     ) {
+      
+      
+      esriConfig.request.corsEnabledServers.push("https://earthquake.usgs.gov");
 
+      
       var lyr, legend;
 
       /**************************************************
