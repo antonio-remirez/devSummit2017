@@ -51,11 +51,9 @@
       SimpleRenderer, SimpleMarkerSymbol, Legend, esriRequest,
       arrayUtils, dom, on, esriConfig
     ) {
-      
-      
-      esriConfig.request.corsEnabledServers.push("https://earthquake.usgs.gov");
-
-      
+        
+      esriConfig.defaults.io.corsEnabledServers.push("earthquake.usgs.gov");
+     
       var lyr, legend;
 
       /**************************************************
