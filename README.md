@@ -1,2 +1,2 @@
-# Aquí dejo algunas del devSummit y la confe
+## Aquí dejo algunas del devSummit y de la conferencia de usuarios
 
